@@ -1,0 +1,10 @@
+.Button__root {
+    height: 2.5rem;
+    width: 2.5rem;
+    background: black;
+    border: 1px solid white;
+}
+
+.Button__root--active {
+    border-color: red;
+}

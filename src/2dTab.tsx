@@ -1,31 +1,23 @@
-import React, { useRef } from 'react';
-import Environment from './Environment';
-import './VrmTab.css';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useLoader } from '@react-three/fiber';
-import * as THREE from 'three';
-import modelPaths, { MODEL_TYPE } from './services/modelPaths';
-import VrmModel from './VrmModel';
+import React from 'react';
+import './2dTab.css';
+import fetchData from './services/fetchData';
+import id from './services/id';
 
-const model = modelPaths.get(MODEL_TYPE.VRM);
+const metadataResource = fetchData(
+  `https://connect.omnimorphs.com/api/v1/external/omnimorphs/${id}`
+);
 
-function VrmTab() {
-  const path = model.read();
-  const gltf = useLoader(GLTFLoader, path);
-  const mixer = useRef<THREE.AnimationMixer>(
-    new THREE.AnimationMixer(gltf.scene)
-  );
+function TwoDTab() {
+  const metadata = metadataResource.read();
+  const image = metadata.image;
 
   return (
-    <section className="VrmTab__root">
-      <header className="VrmTab__header" />
-      <main className="VrmTab__main">
-        <Environment mixer={mixer}>
-          <VrmModel gltf={gltf} />
-        </Environment>
+    <section className="TwoDTab__root">
+      <main className="TwoDTab__main">
+        <img className="TwoDTab__image" src={image} alt={`Omnimorph#${id}`} />
       </main>
     </section>
   );
 }
 
-export default VrmTab;
+export default TwoDTab;

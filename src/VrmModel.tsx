@@ -7,14 +7,15 @@ export type ModelProps = {
   gltf: GLTF & ObjectMap;
 };
 
-function VoxelModel({ gltf }: ModelProps) {
+function VrmModel({ gltf }: ModelProps) {
   return (
     <primitive
       position={new THREE.Vector3(2, -2.5, 2)}
-      scale={new THREE.Vector3(0.09, 0.09, 0.09)}
+      scale={new THREE.Vector3(3.1, 3.1, 3.1)}
+      rotation-y={160.2}
       object={gltf.scene}
     />
   );
 }
 
-export default VoxelModel;
+export default VrmModel;
