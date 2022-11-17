@@ -1,0 +1,9 @@
+.VoxelTab__root {
+    height: 100vh;
+    width: 100vw;
+}
+
+.VoxelTab__main {
+    height: 100%;
+    width: 100%;
+}
