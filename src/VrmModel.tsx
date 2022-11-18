@@ -10,9 +10,10 @@ export type ModelProps = {
 function VrmModel({ gltf }: ModelProps) {
   return (
     <primitive
+      castShadow={true}
+      receiveShadow={true}
       position={new THREE.Vector3(2, -2.5, 2)}
-      scale={new THREE.Vector3(3.1, 3.1, 3.1)}
-      rotation-y={160.2}
+      scale={new THREE.Vector3(3.25, 3.25, 3.25)}
       object={gltf.scene}
     />
   );

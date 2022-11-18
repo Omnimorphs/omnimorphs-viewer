@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Environment from './Environment';
+import Scene from './Scene';
 import './VrmTab.css';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
@@ -20,9 +20,9 @@ function VrmTab() {
     <section className="VrmTab__root">
       <header className="VrmTab__header" />
       <main className="VrmTab__main">
-        <Environment mixer={mixer}>
+        <Scene mixer={mixer}>
           <VrmModel gltf={gltf} />
-        </Environment>
+        </Scene>
       </main>
     </section>
   );

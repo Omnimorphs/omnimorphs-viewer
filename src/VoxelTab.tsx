@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Environment from './Environment';
+import Scene from './Scene';
 import './VoxelTab.css';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
@@ -20,9 +20,9 @@ function VoxelTab() {
     <section className="VoxelTab__root">
       <header className="VoxelTab__header" />
       <main className="VoxelTab__main">
-        <Environment mixer={mixer}>
+        <Scene mixer={mixer}>
           <VoxelModel gltf={gltf} />
-        </Environment>
+        </Scene>
       </main>
     </section>
   );

@@ -10,8 +10,11 @@ export type ModelProps = {
 function VoxelModel({ gltf }: ModelProps) {
   return (
     <primitive
+      castShadow={true}
+      receiveShadow={true}
       position={new THREE.Vector3(2, -2.5, 2)}
       scale={new THREE.Vector3(0.09, 0.09, 0.09)}
+      rotation-y={160}
       object={gltf.scene}
     />
   );
