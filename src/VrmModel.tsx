@@ -8,11 +8,13 @@ export type ModelProps = {
 };
 
 function VrmModel({ gltf }: ModelProps) {
+  gltf.scene.traverse((child) => {
+    child.castShadow = true;
+    child.receiveShadow = true;
+  });
   return (
     <primitive
-      castShadow={true}
-      receiveShadow={true}
-      position={new THREE.Vector3(2, -2.5, 2)}
+      position={new THREE.Vector3(0, -2.5, 0)}
       scale={new THREE.Vector3(3.25, 3.25, 3.25)}
       object={gltf.scene}
     />
