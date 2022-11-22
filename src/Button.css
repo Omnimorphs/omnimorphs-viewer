@@ -3,8 +3,13 @@
     width: 2.5rem;
     background: black;
     border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
 }
 
 .Button__root--active {
-    border-color: red;
+    border-color: #DEBF76;
+    color: #DEBF76;
 }

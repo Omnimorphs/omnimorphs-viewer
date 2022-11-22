@@ -1,0 +1,10 @@
+.MediaSwitch__root {
+    position: absolute;
+    right: 1rem;
+    z-index: 10;
+    padding: 0;
+}
+
+.MediaSwitch__item {
+    margin-bottom: 0.25rem;
+}

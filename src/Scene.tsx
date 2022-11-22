@@ -10,6 +10,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Environment } from '@react-three/drei';
 import { TextureLoader } from 'three';
 
+const testMode = false;
+
 const cameraInitial = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
@@ -52,7 +54,7 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
     if (!dirLight.current) return;
 
     helper.current = new THREE.CameraHelper(dirLight.current?.shadow.camera);
-    if (helper.current) {
+    if (helper.current && testMode) {
       scene.add(helper.current);
     }
 

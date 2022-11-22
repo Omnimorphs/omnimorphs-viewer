@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-import Button from './Button';
+import MediaSwitch from './MediaSwitch';
+import AnimationSwitch from './AnimationSwitch';
 
 const TwoDTab = React.lazy(
   () => /* webpackChunkName: 2dTab */ import('./2dTab')
@@ -16,23 +17,21 @@ const VoxelTab = React.lazy(
 
 function App() {
   const [activeTab, setActiveTab] = useState(0);
+  const [activeAnimation, setActiveAnimation] = useState(0);
 
   return (
     <div className="App">
-      <ul className="App__switch">
-        {[0, 1, 2].map((tabNumber) => (
-          <li key={tabNumber} className="App__switchItem">
-            <Button
-              onClick={() => setActiveTab(tabNumber)}
-              active={tabNumber === activeTab}
-            />
-          </li>
-        ))}
-      </ul>
+      <MediaSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+      {activeTab > 0 && (
+        <AnimationSwitch
+          activeAnimation={activeAnimation}
+          setActiveAnimation={setActiveAnimation}
+        />
+      )}
       <React.Suspense fallback="Loading...">
         {activeTab === 0 && <TwoDTab />}
         {activeTab === 1 && <VrmTab />}
-        {activeTab === 2 && <VoxelTab />}
+        {activeTab === 2 && <VoxelTab activeAnimation={activeAnimation} />}
       </React.Suspense>
     </div>
   );
