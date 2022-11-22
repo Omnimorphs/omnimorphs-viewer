@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import MediaSwitch from './MediaSwitch';
 import AnimationSwitch from './AnimationSwitch';
+import Loader from './Loader';
 
 const TwoDTab = React.lazy(
   () => /* webpackChunkName: 2dTab */ import('./2dTab')
@@ -28,7 +29,7 @@ function App() {
           setActiveAnimation={setActiveAnimation}
         />
       )}
-      <React.Suspense fallback="Loading...">
+      <React.Suspense fallback={<Loader />}>
         {activeTab === 0 && <TwoDTab />}
         {activeTab === 1 && <VrmTab />}
         {activeTab === 2 && <VoxelTab activeAnimation={activeAnimation} />}
