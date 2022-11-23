@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   Canvas as ThreeCanvas,
   useFrame,
@@ -9,6 +9,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Environment } from '@react-three/drei';
 import { TextureLoader } from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
 const testMode = false;
 
@@ -24,8 +27,8 @@ const CameraController = () => {
   const { camera, gl } = useThree();
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement);
-    controls.enablePan = false;
-    controls.enableZoom = false;
+    controls.enablePan = true;
+    controls.enableZoom = true;
     controls.maxPolarAngle = 1.85;
     controls.target.set(0, 0.5, 0);
     controls.update();
@@ -42,28 +45,59 @@ export type EnvironmentProps = {
 };
 
 function SceneInner({ children, mixer }: EnvironmentProps) {
-  const { scene } = useThree();
+  const { scene, gl, camera } = useThree();
   const dirLight = useRef<THREE.DirectionalLight>(null);
   const helper = useRef<THREE.CameraHelper>();
   const alphaMap = useLoader(TextureLoader, '/alpha_map.png');
+  const composer = useMemo(() => new EffectComposer(gl), [gl]);
+  const renderScene = useMemo(
+    () => new RenderPass(scene, camera),
+    [scene, camera]
+  );
+  const bloomPass = useMemo(
+    () =>
+      new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        0.3,
+        0.1,
+        0.1
+      ),
+    []
+  );
+  composer.addPass(renderScene);
+  composer.addPass(bloomPass);
+
   useFrame((_, delta) => {
     mixer.current && mixer.current.update(delta);
-  });
+    composer.render(delta);
+  }, 1);
 
   useEffect(() => {
     if (!dirLight.current) return;
 
-    helper.current = new THREE.CameraHelper(dirLight.current?.shadow.camera);
-    if (helper.current && testMode) {
-      scene.add(helper.current);
+    if (testMode) {
+      helper.current = new THREE.CameraHelper(dirLight.current?.shadow.camera);
+      if (helper.current) {
+        scene.add(helper.current);
+      }
     }
 
     return () => {
+      composer.removePass(renderScene);
+      composer.removePass(bloomPass);
       if (helper.current) {
         scene.remove(helper.current);
       }
     };
-  }, [scene, helper.current?.uuid]);
+  }, [
+    scene,
+    helper.current?.uuid,
+    gl,
+    camera,
+    composer,
+    renderScene,
+    bloomPass
+  ]);
 
   return (
     <>
@@ -88,7 +122,7 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
         receiveShadow={true}
         castShadow={false}
       >
-        <planeBufferGeometry args={[150, 150, 8, 8]} />
+        <planeGeometry args={[150, 150, 8, 8]} />
         <meshStandardMaterial
           color={0x177a90}
           alphaMap={alphaMap}
