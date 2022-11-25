@@ -5,19 +5,18 @@ import React, {
   useRef,
   useState
 } from 'react';
-import Scene from './Scene';
-import './VrmTab.css';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ObjectMap, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { retargetClip } from 'three/examples/jsm/utils/SkeletonUtils';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { ObjectMap, useLoader } from '@react-three/fiber';
+import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+import Scene from './Scene';
+import './VrmTab.css';
 import modelPaths, { MODEL_TYPE } from './services/modelPaths';
 import VrmModel from './VrmModel';
-import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { getMapBonesForMixamoAnimRetarget } from './skeleton-utils/util';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { ModelTabProps } from './VoxelTab';
-import { Group, NormalAnimationBlendMode } from 'three';
 import { treatSkeleton } from './skeleton-utils/skeletonDirectioner';
 
 const model = modelPaths.get(MODEL_TYPE.VRM);
@@ -30,8 +29,8 @@ export class GLTFVRMLoader extends GLTFLoader {
 }
 
 const createAction = (
-  vrmModel: Group,
-  fbx: Group,
+  vrmModel: THREE.Group,
+  fbx: THREE.Group,
   humanBones: any,
   mixer: MutableRefObject<THREE.AnimationMixer>
 ): THREE.AnimationAction => {
@@ -54,7 +53,11 @@ const createAction = (
     animationOriginal,
     retargetBoneMap
   );
-  return mixer.current.clipAction(clip, vrmModel, NormalAnimationBlendMode);
+  return mixer.current.clipAction(
+    clip,
+    vrmModel,
+    THREE.NormalAnimationBlendMode
+  );
 };
 
 const createVrm = (gltf: GLTF & ObjectMap) => {
