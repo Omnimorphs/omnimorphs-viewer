@@ -41,11 +41,6 @@ const createAction = (
   const animationOriginal = fbx.animations[0].tracks[0]
     ? fbx.animations[0]
     : fbx.animations[1];
-  const trackHipPosition = animationOriginal.tracks[0];
-  // Mixamo fbx scale are x100 comparing with other formats
-  trackHipPosition.values.forEach((value, index, values) => {
-    values[index] = value * 0.01;
-  });
   const retargetBoneMap = getMapBonesForMixamoAnimRetarget(humanBones);
   const clip = retargetClip(
     vrmModel,
@@ -88,10 +83,24 @@ function VrmTab({ activeAnimation }: ModelTabProps) {
   const hiAnimation = useLoader(FBXLoader, '/anims/hi.fbx');
   const walkAnimation = useLoader(FBXLoader, '/anims/walking.fbx');
   const animations = useMemo(
-    () => [idleAnimation, hiAnimation, walkAnimation],
+    () =>
+      [idleAnimation, hiAnimation, walkAnimation].map((fbx) => {
+        // some animation has 2 clips but first clip has no tracks
+        const animationOriginal = fbx.animations[0].tracks[0]
+          ? fbx.animations[0]
+          : fbx.animations[1];
+        const trackHipPosition = animationOriginal.tracks[0];
+        // Mixamo fbx scale are x100 comparing with other formats
+        trackHipPosition.values.forEach((value, index, values) => {
+          values[index] *= 0.01;
+        });
+        return fbx;
+      }),
     [hiAnimation, idleAnimation, walkAnimation]
   );
+
   const vrmObject = useMemo(() => createVrm(gltf), [gltf]);
+
   const mixer = useRef(vrmObject.mixer);
 
   const [currentAction, setCurrentAction] =
