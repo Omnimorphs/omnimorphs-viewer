@@ -14,7 +14,7 @@ function VrmModel({ gltf }: ModelProps) {
   });
   return (
     <primitive
-      position={new THREE.Vector3(0, -2.5, 0)}
+      position={new THREE.Vector3(0, -2.6, 0)}
       scale={new THREE.Vector3(3.25, 3.25, 3.25)}
       rotation-y={160}
       object={gltf.scene}
