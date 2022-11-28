@@ -1,10 +1,9 @@
 import React from 'react';
 import * as THREE from 'three';
-import { ObjectMap } from '@react-three/fiber';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export type ModelProps = {
-  gltf: GLTF & ObjectMap;
+  gltf: GLTF;
 };
 
 function VoxelModel({ gltf }: ModelProps) {

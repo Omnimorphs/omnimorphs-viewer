@@ -7,95 +7,28 @@ import React, {
 } from 'react';
 import * as THREE from 'three';
 import { retargetClip } from 'three/examples/jsm/utils/SkeletonUtils';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { ObjectMap, useLoader } from '@react-three/fiber';
-import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import Scene from './Scene';
 import './VrmTab.css';
-import modelPaths, { MODEL_TYPE } from './services/modelPaths';
+import models, { MODEL_TYPE } from './services/models';
 import VrmModel from './VrmModel';
 import { getMapBonesForMixamoAnimRetarget } from './skeleton-utils/util';
 import { ModelTabProps } from './VoxelTab';
-import { treatSkeleton } from './skeleton-utils/skeletonDirectioner';
+import animations from './services/animations';
 
-const model = modelPaths.get(MODEL_TYPE.VRM);
+const model = models.get(MODEL_TYPE.VRM);
 
-export class GLTFVRMLoader extends GLTFLoader {
-  constructor(...rest: any) {
-    super(...rest);
-    this.register((parser) => new VRMLoaderPlugin(parser));
-  }
-}
-
-const createAction = (
-  vrmModel: THREE.Group,
-  fbx: THREE.Group,
-  humanBones: any,
-  mixer: MutableRefObject<THREE.AnimationMixer>
-): THREE.AnimationAction => {
-  console.log('creating action');
-  const animationHelper = new THREE.SkeletonHelper(fbx);
-  (animationHelper as any).skeleton = new THREE.Skeleton(animationHelper.bones);
-  // some animation has 2 clips but first clip has no tracks
-  const animationOriginal = fbx.animations[0].tracks[0]
-    ? fbx.animations[0]
-    : fbx.animations[1];
-  const retargetBoneMap = getMapBonesForMixamoAnimRetarget(humanBones);
-  const clip = retargetClip(
-    vrmModel,
-    animationHelper,
-    animationOriginal,
-    retargetBoneMap
-  );
-  return mixer.current.clipAction(
-    clip,
-    vrmModel,
-    THREE.NormalAnimationBlendMode
-  );
-};
-
-const createVrm = (gltf: GLTF & ObjectMap) => {
-  console.log('creating VRM');
-  treatSkeleton(gltf);
-  VRMUtils.removeUnnecessaryJoints(gltf.scene);
-
-  const vrm = gltf.userData.vrm;
-  const vrmModel = vrm.scene;
-
-  const mixer = new THREE.AnimationMixer(vrmModel);
-  const skeletonHelper = new THREE.SkeletonHelper(vrmModel);
-  (vrmModel as any).skeleton = new THREE.Skeleton(skeletonHelper.bones);
-  const humanBones = gltf.userData.vrm.humanoid.humanBones;
-
-  return {
-    vrm,
-    vrmModel,
-    mixer,
-    humanBones
-  };
-};
+const idleAnimationRes = animations('/anims/idle.fbx');
+const hiAnimationRes = animations('/anims/hi.fbx');
+const walkAnimationRes = animations('/anims/walking.fbx');
 
 function VrmTab({ activeAnimation }: ModelTabProps) {
-  const path = model.read();
-  const gltf = useLoader(GLTFVRMLoader, path);
-  const idleAnimation = useLoader(FBXLoader, '/anims/idle.fbx');
-  const hiAnimation = useLoader(FBXLoader, '/anims/hi.fbx');
-  const walkAnimation = useLoader(FBXLoader, '/anims/walking.fbx');
+  const gltf = model.read();
+  const idleAnimation = idleAnimationRes.read();
+  const hiAnimation = hiAnimationRes.read();
+  const walkAnimation = walkAnimationRes.read();
   const animations = useMemo(
-    () =>
-      [idleAnimation, hiAnimation, walkAnimation].map((fbx) => {
-        // some animation has 2 clips but first clip has no tracks
-        const animationOriginal = fbx.animations[0].tracks[0]
-          ? fbx.animations[0]
-          : fbx.animations[1];
-        const trackHipPosition = animationOriginal.tracks[0];
-        // Mixamo fbx scale are x100 comparing with other formats
-        trackHipPosition.values.forEach((value, index, values) => {
-          values[index] *= 0.01;
-        });
-        return fbx;
-      }),
+    () => [idleAnimation, hiAnimation, walkAnimation],
     [hiAnimation, idleAnimation, walkAnimation]
   );
 
@@ -135,3 +68,44 @@ function VrmTab({ activeAnimation }: ModelTabProps) {
 }
 
 export default VrmTab;
+
+const createAction = (
+  vrmModel: THREE.Group,
+  fbx: THREE.Group,
+  humanBones: any,
+  mixer: MutableRefObject<THREE.AnimationMixer>
+): THREE.AnimationAction => {
+  const animationHelper = new THREE.SkeletonHelper(fbx);
+  (animationHelper as any).skeleton = new THREE.Skeleton(animationHelper.bones);
+  // some animation has 2 clips but first clip has no tracks
+  const animationOriginal = fbx.animations[0].tracks[0]
+    ? fbx.animations[0]
+    : fbx.animations[1];
+  const retargetBoneMap = getMapBonesForMixamoAnimRetarget(humanBones);
+  const clip = retargetClip(
+    vrmModel,
+    animationHelper,
+    animationOriginal,
+    retargetBoneMap
+  );
+  return mixer.current.clipAction(
+    clip,
+    vrmModel,
+    THREE.NormalAnimationBlendMode
+  );
+};
+
+const createVrm = (gltf: GLTF) => {
+  const vrm = gltf.userData.vrm;
+  const vrmModel = vrm.scene;
+
+  const mixer = new THREE.AnimationMixer(vrmModel);
+  const humanBones = gltf.userData.vrm.humanoid.humanBones;
+
+  return {
+    vrm,
+    vrmModel,
+    mixer,
+    humanBones
+  };
+};
