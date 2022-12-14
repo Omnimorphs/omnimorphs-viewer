@@ -19,7 +19,7 @@ const icons = [
 function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
   return (
     <ul className="MediaSwitch__root">
-      {[0, 1, 2].map((tabNumber) => (
+      {[0, 1].map((tabNumber) => (
         <li key={tabNumber} className="MediaSwitch__item">
           <Button
             className="MediaSwitch__button"

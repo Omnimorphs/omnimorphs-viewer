@@ -1,17 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import {
-  Canvas as ThreeCanvas,
-  useFrame,
-  useLoader,
-  useThree
-} from '@react-three/fiber';
+import { Canvas as ThreeCanvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Environment } from '@react-three/drei';
-import { TextureLoader } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { useGLTF } from '@react-three/drei';
 
 const testMode = false;
 
@@ -21,15 +16,15 @@ const cameraInitial = new THREE.PerspectiveCamera(
   1,
   100
 );
-cameraInitial.position.set(0, 3, -9);
+cameraInitial.position.set(0, 3, -10);
 
 const CameraController = () => {
   const { camera, gl } = useThree();
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement);
-    controls.enablePan = true;
-    controls.enableZoom = true;
-    controls.maxPolarAngle = 1.85;
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.maxPolarAngle = 1.8;
     controls.target.set(0, 0.5, 0);
     controls.update();
     return () => {
@@ -46,9 +41,9 @@ export type EnvironmentProps = {
 
 function SceneInner({ children, mixer }: EnvironmentProps) {
   const { scene, gl, camera } = useThree();
+  const envGltf = useGLTF('/envtest.glb');
   const dirLight = useRef<THREE.DirectionalLight>(null);
   const helper = useRef<THREE.CameraHelper>();
-  const alphaMap = useLoader(TextureLoader, '/alpha_map.png');
   const composer = useMemo(() => new EffectComposer(gl), [gl]);
   const renderScene = useMemo(
     () => new RenderPass(scene, camera),
@@ -114,22 +109,15 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
         shadow-camera-far={30}
         shadow-camera-visible={true}
       />
+      <primitive
+        object={envGltf.scene}
+        position={new THREE.Vector3(0, -2.5, 0)}
+        scale={new THREE.Vector3(2.5, 2.5, 2.5)}
+        receiveShadow={true}
+        castShadow={true}
+      />
       {children}
       <Environment background={true} files="hdri_test1668755041.hdr" path="/" />
-      <mesh
-        rotation-x={-Math.PI / 2}
-        position={new THREE.Vector3(0, -2.5, 2)}
-        receiveShadow={true}
-        castShadow={false}
-      >
-        <planeGeometry args={[150, 150, 8, 8]} />
-        <meshStandardMaterial
-          color={0x177a90}
-          alphaMap={alphaMap}
-          transparent={true}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
     </>
   );
 }

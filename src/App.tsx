@@ -12,9 +12,9 @@ const VrmTab = React.lazy(
   () => /* webpackChunkName: VrmTab */ import('./VrmTab')
 );
 
-const VoxelTab = React.lazy(
-  () => /* webpackChunkName: VoxelTab */ import('./VoxelTab')
-);
+// const VoxelTab = React.lazy(
+//   () => /* webpackChunkName: VoxelTab */ import('./VoxelTab')
+// );
 
 function App() {
   const [activeTab, setActiveTab] = useState(0);
@@ -32,7 +32,7 @@ function App() {
       <React.Suspense fallback={<Loader />}>
         {activeTab === 0 && <TwoDTab />}
         {activeTab === 1 && <VrmTab activeAnimation={activeAnimation} />}
-        {activeTab === 2 && <VoxelTab activeAnimation={activeAnimation} />}
+        {/*{activeTab === 2 && <VoxelTab activeAnimation={activeAnimation} />}*/}
       </React.Suspense>
     </div>
   );

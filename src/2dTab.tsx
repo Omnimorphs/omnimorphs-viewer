@@ -1,15 +1,14 @@
 import React from 'react';
 import './2dTab.css';
-import fetchData from './services/fetchData';
 import id from './services/id';
+import wrapPromise from './services/wrapPromise';
+import api from './services/api';
 
-const metadataResource = fetchData(
-  `https://connect.omnimorphs.com/api/v1/external/omnimorphs/${id}`
-);
+const metadataResource = wrapPromise(api());
 
 function TwoDTab() {
   const metadata = metadataResource.read();
-  const image = metadata.image;
+  const image = metadata.metadata.imageIpfs;
 
   return (
     <section className="TwoDTab__root">
