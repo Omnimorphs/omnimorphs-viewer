@@ -98,15 +98,15 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
     <>
       <directionalLight
         ref={dirLight}
-        intensity={0.35}
+        intensity={0.3}
         position={new THREE.Vector3(-5, 10, -8)}
         target-position={new THREE.Vector3(0, 0, 10)}
         castShadow={true}
-        shadow-mapSize-width={150}
-        shadow-mapSize-height={150}
+        shadow-mapSize-width={200}
+        shadow-mapSize-height={200}
         shadow-darkness={1}
-        shadow-camera-near={8}
-        shadow-camera-far={30}
+        shadow-camera-near={15}
+        shadow-camera-far={35}
         shadow-camera-visible={true}
       />
       <primitive
