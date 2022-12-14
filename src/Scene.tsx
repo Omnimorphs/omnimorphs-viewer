@@ -53,9 +53,9 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
     () =>
       new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.3,
-        0.1,
-        0.1
+        0.25,
+        0.15,
+        0.25
       ),
     []
   );
