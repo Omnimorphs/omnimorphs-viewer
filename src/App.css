@@ -1,1 +1,7 @@
-
+.App_pwdBy {
+    color: white;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+}

@@ -13,3 +13,7 @@
     border-color: #DEBF76;
     color: #DEBF76;
 }
+
+.Button__root:disabled {
+    color: gray;
+}

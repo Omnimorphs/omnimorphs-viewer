@@ -8,3 +8,7 @@
 .MediaSwitch__item {
     margin-bottom: 0.25rem;
 }
+
+.MediaSwitch__button--disabled {
+    color: gray !important;
+}

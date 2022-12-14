@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import 'react-tooltip/dist/react-tooltip.css';
 import MediaSwitch from './MediaSwitch';
 import AnimationSwitch from './AnimationSwitch';
 import Loader from './Loader';

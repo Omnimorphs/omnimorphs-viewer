@@ -63,6 +63,14 @@ function VrmTab({ activeAnimation }: ModelTabProps) {
           <VrmModel gltf={vrmObject.vrm} />
         </Scene>
       </main>
+      <a
+        href="https://cryptoavatars.io"
+        target="_blank"
+        className="App_pwdBy"
+        rel="noreferrer"
+      >
+        cryptoavatars.io
+      </a>
     </section>
   );
 }
