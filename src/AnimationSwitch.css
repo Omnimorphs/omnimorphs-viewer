@@ -1,6 +1,7 @@
 .AnimationSwitch__root {
     position: absolute;
     left: 1rem;
+    top: 0.5rem;
     z-index: 10;
     padding: 0;
 }

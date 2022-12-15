@@ -1,6 +1,7 @@
 .MediaSwitch__root {
     position: absolute;
     right: 1rem;
+    top: 0.5rem;
     z-index: 10;
     padding: 0;
 }
