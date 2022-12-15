@@ -11,7 +11,10 @@ function TwoDTab() {
   const image = metadata.metadata.imageIpfs;
 
   return (
-    <section className="TwoDTab__root">
+    <section
+      className="TwoDTab__root"
+      style={{ backgroundImage: `url(${image})` }}
+    >
       <main className="TwoDTab__main">
         <img className="TwoDTab__image" src={image} alt={`Omnimorph#${id}`} />
       </main>

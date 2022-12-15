@@ -11,6 +11,7 @@ function SaluteIcon({ className = '' }: SaluteIconProps) {
         [className]: true
       })}
       viewBox="0 0 56.366 56.366"
+      width="50"
     >
       <circle fill="currentColor" cx="28.554" cy="5.62" r="5.62" />
       <path

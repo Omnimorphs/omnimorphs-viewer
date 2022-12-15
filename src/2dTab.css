@@ -1,6 +1,9 @@
 .TwoDTab__root {
     height: 100vh;
     width: 100vw;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 .TwoDTab__main {
@@ -9,6 +12,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(60px);
 }
 
 .TwoDTab__image {

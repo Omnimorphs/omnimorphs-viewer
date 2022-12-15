@@ -11,6 +11,7 @@ function WalkIcon({ className = '' }: WalkIconProps) {
         [className]: true
       })}
       viewBox="0 0 512 512"
+      width="50"
     >
       <path
         fill="currentColor"

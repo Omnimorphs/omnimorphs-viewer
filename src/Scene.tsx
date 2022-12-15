@@ -22,8 +22,8 @@ const CameraController = () => {
   const { camera, gl } = useThree();
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement);
-    controls.enablePan = false;
-    controls.enableZoom = false;
+    controls.enablePan = true;
+    controls.enableZoom = true;
     controls.maxPolarAngle = 1.8;
     controls.target.set(0, 0.5, 0);
     controls.update();
@@ -42,8 +42,10 @@ export type EnvironmentProps = {
 function SceneInner({ children, mixer }: EnvironmentProps) {
   const { scene, gl, camera } = useThree();
   const envGltf = useGLTF('/envtest.glb');
-  const dirLight = useRef<THREE.DirectionalLight>(null);
-  const helper = useRef<THREE.CameraHelper>();
+  const dirLightTop = useRef<THREE.DirectionalLight>(null);
+  const dirLightBottom = useRef<THREE.DirectionalLight>(null);
+  const helperTop = useRef<THREE.CameraHelper>();
+  const helperBottom = useRef<THREE.CameraHelper>();
   const composer = useMemo(() => new EffectComposer(gl), [gl]);
   const renderScene = useMemo(
     () => new RenderPass(scene, camera),
@@ -53,40 +55,49 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
     () =>
       new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.25,
+        0.2,
         0.15,
-        0.25
+        0.5
       ),
     []
   );
-  composer.addPass(renderScene);
-  composer.addPass(bloomPass);
+  // composer.addPass(renderScene);
+  // composer.addPass(bloomPass);
 
   useFrame((_, delta) => {
     mixer.current && mixer.current.update(delta);
-    composer.render(delta);
-  }, 1);
+    // composer.render(delta);
+  });
 
   useEffect(() => {
-    if (!dirLight.current) return;
+    if (!dirLightTop.current) return;
+    if (!dirLightBottom.current) return;
 
     if (testMode) {
-      helper.current = new THREE.CameraHelper(dirLight.current?.shadow.camera);
-      if (helper.current) {
-        scene.add(helper.current);
+      helperTop.current = new THREE.CameraHelper(
+        dirLightTop.current?.shadow.camera
+      );
+      if (helperTop.current) {
+        scene.add(helperTop.current);
+      }
+      helperBottom.current = new THREE.CameraHelper(
+        dirLightBottom.current?.shadow.camera
+      );
+      if (helperBottom.current) {
+        scene.add(helperBottom.current);
       }
     }
 
     return () => {
       composer.removePass(renderScene);
       composer.removePass(bloomPass);
-      if (helper.current) {
-        scene.remove(helper.current);
+      if (helperTop.current) {
+        scene.remove(helperTop.current);
       }
     };
   }, [
     scene,
-    helper.current?.uuid,
+    helperTop.current?.uuid,
     gl,
     camera,
     composer,
@@ -97,10 +108,11 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
   return (
     <>
       <directionalLight
-        ref={dirLight}
-        intensity={0.3}
-        position={new THREE.Vector3(-5, 10, -8)}
-        target-position={new THREE.Vector3(0, 0, 10)}
+        ref={dirLightBottom}
+        color={new THREE.Color(0xffffff)}
+        intensity={0.6}
+        position={new THREE.Vector3(0, -5, -7)}
+        target-position={new THREE.Vector3(0, 0, 0)}
         castShadow={true}
         shadow-mapSize-width={200}
         shadow-mapSize-height={200}
@@ -109,6 +121,21 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
         shadow-camera-far={35}
         shadow-camera-visible={true}
       />
+      <directionalLight
+        ref={dirLightTop}
+        color={new THREE.Color(0xbaadba)}
+        intensity={0.55}
+        position={new THREE.Vector3(0, 10, -5)}
+        target-position={new THREE.Vector3(0, 0, 0)}
+        castShadow={true}
+        shadow-mapSize-width={200}
+        shadow-mapSize-height={200}
+        shadow-darkness={1}
+        shadow-camera-near={15}
+        shadow-camera-far={35}
+        shadow-camera-visible={true}
+      />
+      <ambientLight color={new THREE.Color(0x735178)} intensity={1} />
       <primitive
         object={envGltf.scene}
         position={new THREE.Vector3(0, -2.5, 0)}
@@ -117,7 +144,7 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
         castShadow={true}
       />
       {children}
-      <Environment background={true} files="hdri_test1668755041.hdr" path="/" />
+      <Environment background={true} files="hdri.hdr" path="/" />
     </>
   );
 }

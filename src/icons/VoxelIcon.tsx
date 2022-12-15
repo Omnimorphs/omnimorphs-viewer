@@ -11,6 +11,7 @@ function VoxelIcon({ className = '' }: VoxelIconProps) {
         [className]: true
       })}
       viewBox="0 0 20 20"
+      width="50"
     >
       <path
         fill="currentColor"

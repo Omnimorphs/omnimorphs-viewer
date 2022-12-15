@@ -11,6 +11,7 @@ function IdleIcon({ className = '' }: IdleIconProps) {
         [className]: true
       })}
       viewBox="0 0 556.38 556.38"
+      width="50"
     >
       <path
         fill="currentColor"
