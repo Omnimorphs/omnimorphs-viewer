@@ -4,8 +4,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Environment } from '@react-three/drei';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { useGLTF } from '@react-three/drei';
 
 const testMode = false;
@@ -41,32 +39,15 @@ export type EnvironmentProps = {
 
 function SceneInner({ children, mixer }: EnvironmentProps) {
   const { scene, gl, camera } = useThree();
-  const envGltf = useGLTF('/envtest.glb');
+  const envGltf = useGLTF('/env.glb');
   const dirLightTop = useRef<THREE.DirectionalLight>(null);
   const dirLightBottom = useRef<THREE.DirectionalLight>(null);
   const helperTop = useRef<THREE.CameraHelper>();
   const helperBottom = useRef<THREE.CameraHelper>();
   const composer = useMemo(() => new EffectComposer(gl), [gl]);
-  const renderScene = useMemo(
-    () => new RenderPass(scene, camera),
-    [scene, camera]
-  );
-  const bloomPass = useMemo(
-    () =>
-      new UnrealBloomPass(
-        new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.2,
-        0.15,
-        0.5
-      ),
-    []
-  );
-  // composer.addPass(renderScene);
-  // composer.addPass(bloomPass);
 
   useFrame((_, delta) => {
     mixer.current && mixer.current.update(delta);
-    // composer.render(delta);
   });
 
   useEffect(() => {
@@ -89,21 +70,14 @@ function SceneInner({ children, mixer }: EnvironmentProps) {
     }
 
     return () => {
-      composer.removePass(renderScene);
-      composer.removePass(bloomPass);
       if (helperTop.current) {
         scene.remove(helperTop.current);
       }
+      if (helperBottom.current) {
+        scene.remove(helperBottom.current);
+      }
     };
-  }, [
-    scene,
-    helperTop.current?.uuid,
-    gl,
-    camera,
-    composer,
-    renderScene,
-    bloomPass
-  ]);
+  }, [scene, helperTop.current?.uuid, gl, camera, composer]);
 
   return (
     <>

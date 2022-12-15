@@ -4,6 +4,8 @@ import 'react-tooltip/dist/react-tooltip.css';
 import MediaSwitch from './MediaSwitch';
 import AnimationSwitch from './AnimationSwitch';
 import Loader from './Loader';
+import { ErrorBoundary } from 'react-error-boundary';
+import Fallback from './Fallback';
 
 const TwoDTab = React.lazy(
   () => /* webpackChunkName: 2dTab */ import('./2dTab')
@@ -23,18 +25,20 @@ function App() {
 
   return (
     <div className="App">
-      <MediaSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
-      {activeTab > 0 && (
-        <AnimationSwitch
-          activeAnimation={activeAnimation}
-          setActiveAnimation={setActiveAnimation}
-        />
-      )}
-      <React.Suspense fallback={<Loader />}>
-        {activeTab === 0 && <TwoDTab />}
-        {activeTab === 1 && <VrmTab activeAnimation={activeAnimation} />}
-        {/*{activeTab === 2 && <VoxelTab activeAnimation={activeAnimation} />}*/}
-      </React.Suspense>
+      <ErrorBoundary fallback={<Fallback />}>
+        <MediaSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+        {activeTab > 0 && (
+          <AnimationSwitch
+            activeAnimation={activeAnimation}
+            setActiveAnimation={setActiveAnimation}
+          />
+        )}
+        <React.Suspense fallback={<Loader />}>
+          {activeTab === 0 && <TwoDTab />}
+          {activeTab === 1 && <VrmTab activeAnimation={activeAnimation} />}
+          {/*{activeTab === 2 && <VoxelTab activeAnimation={activeAnimation} />}*/}
+        </React.Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
