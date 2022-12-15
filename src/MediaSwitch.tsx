@@ -32,7 +32,7 @@ function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
               onClick={() => tabNumber < 2 && setActiveTab(tabNumber)}
               active={tabNumber === activeTab}
               id={tabNumber === 2 && 'voxel'}
-              data-tooltip-content="Available in The Sandbox"
+              data-tooltip-content="Available in The Sandbox for now"
               data-tooltip-place="bottom"
             >
               {icons[tabNumber]}
