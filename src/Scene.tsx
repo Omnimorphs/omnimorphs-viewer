@@ -22,8 +22,8 @@ const CameraController = () => {
   const { camera, gl } = useThree();
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement);
-    controls.enablePan = true;
-    controls.enableZoom = true;
+    controls.enablePan = false;
+    controls.enableZoom = false;
     controls.maxPolarAngle = 1.8;
     controls.target.set(0, 0.5, 0);
     controls.update();
