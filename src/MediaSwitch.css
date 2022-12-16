@@ -12,4 +12,9 @@
 
 .MediaSwitch__button--disabled {
     color: gray !important;
+    cursor: unset;
+}
+
+.MediaSwitch__button:not(.MediaSwitch__button--disabled) {
+    cursor: pointer;
 }
