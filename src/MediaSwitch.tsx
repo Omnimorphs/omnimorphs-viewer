@@ -18,6 +18,13 @@ const icons = [
   <VoxelIcon key={2} />
 ];
 
+const ids = ['2d', 'vrm', 'voxel'];
+const texts = [
+  'Original Artwork',
+  'VR-Ready Avatar',
+  'Voxel Avatar - Available in The Sandbox'
+];
+
 function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
   return (
     <>
@@ -31,8 +38,8 @@ function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
               })}
               onClick={() => tabNumber < 2 && setActiveTab(tabNumber)}
               active={tabNumber === activeTab}
-              id={tabNumber === 2 && 'voxel'}
-              data-tooltip-content="Available in The Sandbox for now"
+              id={ids[tabNumber]}
+              data-tooltip-content={texts[tabNumber]}
               data-tooltip-place="bottom"
             >
               {icons[tabNumber]}
@@ -41,6 +48,8 @@ function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
         ))}
       </ul>
       <ReactTooltip anchorId="voxel" />
+      <ReactTooltip anchorId="vrm" />
+      <ReactTooltip anchorId="2d" />
     </>
   );
 }

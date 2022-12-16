@@ -64,8 +64,8 @@ function VrmTab({ activeAnimation }: ModelTabProps) {
         </Scene>
       </main>
       <a
-        href="https://cryptoavatars.io"
-        target="_blank"
+        href="https://cryptoavatars.io/collection/Omnimorphs"
+        target="_parent"
         className="App_pwdBy"
         rel="noreferrer"
       >

@@ -23,7 +23,7 @@ const CameraController = () => {
     controls.enablePan = false;
     controls.enableZoom = false;
     controls.maxPolarAngle = 1.8;
-    controls.target.set(0, 0.5, 0);
+    controls.target.set(0, 0.85, 0);
     controls.update();
     return () => {
       controls.dispose();
