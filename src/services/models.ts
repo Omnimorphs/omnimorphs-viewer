@@ -10,7 +10,12 @@ export enum MODEL_TYPE {
   VRM
 }
 
-const GLTFCache: { [type: number]: GLTF } = {};
+export type GLTFObject = {
+  GLTF: GLTF;
+  avatarUpToDate: boolean;
+};
+
+const GLTFCache: { [type: number]: GLTFObject } = {};
 
 export class GLTFVRMLoader extends GLTFLoader {
   constructor(isVrm: boolean, ...rest: any) {
@@ -24,7 +29,7 @@ export class GLTFVRMLoader extends GLTFLoader {
 function models() {
   const get = (type: MODEL_TYPE) => {
     return wrapPromise(
-      new Promise<GLTF>((resolve) => {
+      new Promise<GLTFObject>((resolve) => {
         if (GLTFCache[type]) {
           resolve(GLTFCache[type]);
           return;
@@ -43,15 +48,21 @@ function models() {
                 skeletonHelper.bones
               );
 
-              GLTFCache[type] = gltf;
-              resolve(gltf);
+              GLTFCache[type] = {
+                GLTF: gltf,
+                avatarUpToDate: resp.metadata.avatarsUpToDate
+              };
+              resolve(GLTFCache[type]);
             });
           });
         } else {
           const loader = new GLTFVRMLoader(false);
           loader.loadAsync('/Omnimorph_00448.gltf').then((gltf) => {
-            GLTFCache[type] = gltf;
-            resolve(gltf);
+            GLTFCache[type] = {
+              GLTF: gltf,
+              avatarUpToDate: true
+            };
+            resolve(GLTFCache[type]);
           });
         }
       })

@@ -6,6 +6,8 @@ import VrmIcon from './icons/VrmIcon';
 import VoxelIcon from './icons/VoxelIcon';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import classNames from 'classnames';
+import wrapPromise from './services/wrapPromise';
+import api from './services/api';
 
 export type MediaSwitchProps = {
   activeTab: number;
@@ -25,31 +27,38 @@ const texts = [
   'Voxel Avatar - Available in The Sandbox'
 ];
 
+const metadataResource = wrapPromise(api());
+
 function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
+  const metadata = metadataResource.read();
   return (
     <>
-      <ul className="MediaSwitch__root">
-        {[0, 1, 2].map((tabNumber) => (
-          <li key={tabNumber} className="MediaSwitch__item">
-            <Button
-              className={classNames({
-                MediaSwitch__button: true,
-                'MediaSwitch__button--disabled': tabNumber === 2
-              })}
-              onClick={() => tabNumber < 2 && setActiveTab(tabNumber)}
-              active={tabNumber === activeTab}
-              id={ids[tabNumber]}
-              data-tooltip-content={texts[tabNumber]}
-              data-tooltip-place="bottom"
-            >
-              {icons[tabNumber]}
-            </Button>
-          </li>
-        ))}
-      </ul>
-      <ReactTooltip anchorId="voxel" />
-      <ReactTooltip anchorId="vrm" />
-      <ReactTooltip anchorId="2d" />
+      {metadata.metadata.avatarsLoaded ? (
+        <>
+          <ul className="MediaSwitch__root">
+            {[0, 1, 2].map((tabNumber) => (
+              <li key={tabNumber} className="MediaSwitch__item">
+                <Button
+                  className={classNames({
+                    MediaSwitch__button: true,
+                    'Button__root--disabled': tabNumber === 2
+                  })}
+                  onClick={() => tabNumber < 2 && setActiveTab(tabNumber)}
+                  active={tabNumber === activeTab}
+                  id={ids[tabNumber]}
+                  data-tooltip-content={texts[tabNumber]}
+                  data-tooltip-place="bottom"
+                >
+                  {icons[tabNumber]}
+                </Button>
+              </li>
+            ))}
+          </ul>
+          <ReactTooltip anchorId="voxel" />
+          <ReactTooltip anchorId="vrm" />
+          <ReactTooltip anchorId="2d" />
+        </>
+      ) : null}
     </>
   );
 }

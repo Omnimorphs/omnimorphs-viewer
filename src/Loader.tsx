@@ -1,6 +1,6 @@
 import './Loader.css';
 
-function Button() {
+function Loader() {
   // eslint-disable-next-line jsx-a11y/alt-text
   return (
     <div className="Loader__root">
@@ -13,4 +13,4 @@ function Button() {
   );
 }
 
-export default Button;
+export default Loader;

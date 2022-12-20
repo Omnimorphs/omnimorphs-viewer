@@ -12,7 +12,8 @@ export type ModelTabProps = {
 };
 
 function VoxelTab({ activeAnimation }: ModelTabProps) {
-  const gltf = model.read();
+  const gltfObject = model.read();
+  const gltf = gltfObject.GLTF;
   const mixer = useRef<THREE.AnimationMixer>(
     new THREE.AnimationMixer(gltf.scene)
   );

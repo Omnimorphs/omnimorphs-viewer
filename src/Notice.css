@@ -1,0 +1,6 @@
+.Notice__root {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 10;
+}

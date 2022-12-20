@@ -26,7 +26,9 @@ function App() {
   return (
     <div className="App">
       <ErrorBoundary fallback={<Fallback />}>
-        <MediaSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+        <React.Suspense>
+          <MediaSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+        </React.Suspense>
         {activeTab > 3 && (
           <AnimationSwitch
             activeAnimation={activeAnimation}

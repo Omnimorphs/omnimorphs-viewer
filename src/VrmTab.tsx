@@ -15,6 +15,7 @@ import VrmModel from './VrmModel';
 import { getMapBonesForMixamoAnimRetarget } from './skeleton-utils/util';
 import { ModelTabProps } from './VoxelTab';
 import animations from './services/animations';
+import Notice from './Notice';
 
 const model = models.get(MODEL_TYPE.VRM);
 
@@ -23,7 +24,8 @@ const hiAnimationRes = animations('/anims/hi.fbx');
 const walkAnimationRes = animations('/anims/walking.fbx');
 
 function VrmTab({ activeAnimation }: ModelTabProps) {
-  const gltf = model.read();
+  const gltfObject = model.read();
+  const gltf = gltfObject.GLTF;
   const idleAnimation = idleAnimationRes.read();
   const hiAnimation = hiAnimationRes.read();
   const walkAnimation = walkAnimationRes.read();
@@ -57,6 +59,9 @@ function VrmTab({ activeAnimation }: ModelTabProps) {
 
   return (
     <section className="VrmTab__root">
+      {!gltfObject.avatarUpToDate && (
+        <Notice message="Avatar Not Yet Up To Date" />
+      )}
       <header className="VrmTab__header" />
       <main className="VrmTab__main">
         <Scene mixer={mixer}>

@@ -14,6 +14,7 @@
     color: #DEBF76;
 }
 
-.Button__root:disabled {
+.Button__root--disabled {
     color: gray;
+    cursor: unset;
 }
