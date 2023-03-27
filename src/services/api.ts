@@ -11,7 +11,7 @@ const getResp = async () => {
   try {
     const apiResponse = await (
       await fetch(
-        'https://api.cryptoavatars.io/v1/nfts/avatars/0xb5f3dEE204cA76E913bb3129BA0312b9f0f31D82/' +
+        'https://api.cryptoavatars.io/v1/nfts/avatars/1/0xb5f3dEE204cA76E913bb3129BA0312b9f0f31D82/' +
           id,
         {
           headers: {
