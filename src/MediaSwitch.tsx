@@ -40,10 +40,9 @@ function MediaSwitch({ activeTab, setActiveTab }: MediaSwitchProps) {
               <li key={tabNumber} className="MediaSwitch__item">
                 <Button
                   className={classNames({
-                    MediaSwitch__button: true,
-                    'Button__root--disabled': tabNumber === 2
+                    MediaSwitch__button: true
                   })}
-                  onClick={() => tabNumber < 2 && setActiveTab(tabNumber)}
+                  onClick={() => setActiveTab(tabNumber)}
                   active={tabNumber === activeTab}
                   id={ids[tabNumber]}
                   data-tooltip-content={texts[tabNumber]}

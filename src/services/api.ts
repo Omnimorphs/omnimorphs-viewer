@@ -44,7 +44,6 @@ const getResp = async () => {
 
 async function api() {
   if (cache) {
-    console.log(cache);
     return cache;
   }
 
@@ -55,8 +54,6 @@ async function api() {
   const resp = await promiseCache;
 
   cache = resp;
-
-  console.log(resp);
 
   return resp;
 }

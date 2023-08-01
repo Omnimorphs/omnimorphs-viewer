@@ -26,6 +26,11 @@ export class GLTFVRMLoader extends GLTFLoader {
   }
 }
 
+const assetTypes = {
+  [MODEL_TYPE.VRM]: 'default',
+  [MODEL_TYPE.VOXEL]: 'nexus-voxel'
+};
+
 function models() {
   const get = (type: MODEL_TYPE) => {
     return wrapPromise(
@@ -34,10 +39,17 @@ function models() {
           resolve(GLTFCache[type]);
           return;
         }
-        if (type === MODEL_TYPE.VRM) {
+        if ([MODEL_TYPE.VRM, MODEL_TYPE.VOXEL].includes(type)) {
           api().then((resp) => {
+            const asset = resp.metadata.assets.find(
+              (a: any) =>
+                a.media_type === 'model' && a.asset_type === assetTypes[type]
+            );
+            const file = asset.files.find(
+              (f: any) => f.file_type === 'model/vrm'
+            );
             const loader = new GLTFVRMLoader(true);
-            loader.loadAsync(resp.metadata.asset).then((gltf) => {
+            loader.loadAsync(file.url).then((gltf) => {
               treatSkeleton(gltf);
               VRMUtils.removeUnnecessaryJoints(gltf.scene);
 
@@ -56,14 +68,7 @@ function models() {
             });
           });
         } else {
-          const loader = new GLTFVRMLoader(false);
-          loader.loadAsync('/Omnimorph_00448.gltf').then((gltf) => {
-            GLTFCache[type] = {
-              GLTF: gltf,
-              avatarUpToDate: true
-            };
-            resolve(GLTFCache[type]);
-          });
+          throw new Error('Unknown model type');
         }
       })
     );

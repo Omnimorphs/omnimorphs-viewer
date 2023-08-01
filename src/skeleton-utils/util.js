@@ -761,7 +761,7 @@ export const getMapBonesForMixamoAnimRetarget = (humanBones) => {
       //Thumb
       [humanBones.leftThumbProximal.node.name]: 'mixamorigLeftHandThumb1',
       [humanBones.leftThumbMetacarpal.node.name]: 'mixamorigLeftHandThumb2',
-      [humanBones.leftThumbDistal.node.name]: 'mixamorigLeftHandThumb3',
+      [humanBones.leftThumbDistal?.node.name]: 'mixamorigLeftHandThumb3',
 
       //Index
       [humanBones.leftIndexProximal.node.name]: 'mixamorigLeftHandIndex1',
@@ -792,7 +792,7 @@ export const getMapBonesForMixamoAnimRetarget = (humanBones) => {
       //Thumb
       [humanBones.rightThumbProximal.node.name]: 'mixamorigRightHandThumb1',
       [humanBones.rightThumbMetacarpal.node.name]: 'mixamorigRightHandThumb2',
-      [humanBones.rightThumbDistal.node.name]: 'mixamorigRightHandThumb3',
+      [humanBones.rightThumbDistal?.node.name]: 'mixamorigRightHandThumb3',
 
       //Index
       [humanBones.rightIndexProximal.node.name]: 'mixamorigRightHandIndex1',
